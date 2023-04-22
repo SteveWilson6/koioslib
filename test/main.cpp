@@ -2,6 +2,7 @@
 #include "koioslib/thread_pool/thread_pool.hpp"
 #include <fmt/core.h>
 #include <utility>
+#include "koioslib/utility/defer.hpp"
 
 using namespace std;
 
@@ -36,7 +37,7 @@ public:
 
 int main(int argc, char** argv)
 {
-        wilson::thread_pool tp{ 1 };
-        tp.enqueue([]{});
+        defer { ::std::cout << "world" << ::std::endl; };
+        ::std::cout << "hello ";
 }
 
