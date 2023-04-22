@@ -1,7 +1,7 @@
 add_rules("mode.debug", "mode.release")
 
-add_requires("fmt", "gflags")
-add_packages("fmt", "gflags")
+add_requires("fmt", "gflags", "gtest")
+add_packages("fmt", "gflags", "gtest")
 set_languages("c++20")
 
 target("koioslib")

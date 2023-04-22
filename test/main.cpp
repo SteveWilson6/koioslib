@@ -3,6 +3,7 @@
 #include <fmt/core.h>
 #include <utility>
 #include "koioslib/utility/defer.hpp"
+#include "gtest/gtest.h"
 
 using namespace std;
 
