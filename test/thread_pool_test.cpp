@@ -2,6 +2,11 @@
 #include "gtest/gtest.h"
 #include "fmt/core.h"
 
+#include <vector> // ::std::vector<::std::future<int>> 
+#include <string_view>
+
+using namespace ::std::string_view_literals;
+
 // ======== GTEST TEST CLASS ========
 
 class thread_pool_test : public ::testing::Test {
@@ -37,26 +42,72 @@ private:
         int val_{ success };
 };
 
-class returned_ref_functor {
+class returned_val_passed_functor {
 public:
         int operator()(foo f) const noexcept { return f.val(); }
 
-        returned_ref_functor() = default;
+        returned_val_passed_functor() = default;
 
-        returned_ref_functor(returned_ref_functor&& f) noexcept {
-                //fmt::print("returned_ref_functor moved\n"); 
+        returned_val_passed_functor(returned_val_passed_functor&& f) noexcept {
+                //fmt::print("returned_val_passed_functor moved\n"); 
         }
 
-        returned_ref_functor(const returned_ref_functor& f) noexcept { 
-                //fmt::print("returned_ref_functor copied\n"); 
+        returned_val_passed_functor(const returned_val_passed_functor& f) noexcept { 
+                //fmt::print("returned_val_passed_functor copied\n"); 
         }
 };
 
+class nonreturned_val_passed_functor {
+public:
+        void operator()(foo f) const { 
+                if (f.val() != success)
+                        throw "test failed"sv;
+        }
+
+        nonreturned_val_passed_functor() = default;
+
+        nonreturned_val_passed_functor(returned_val_passed_functor&& f) noexcept {
+                //fmt::print("returned_val_passed_functor moved\n"); 
+        }
+
+        nonreturned_val_passed_functor(const returned_val_passed_functor& f) noexcept { 
+                //fmt::print("returned_val_passed_functor copied\n"); 
+        }
+};
+
+int regular_returned_ref_passed_func(foo& f) {
+        return f.val();;
+}
+
+void regular_nonreturned_const_ref_passed_func(const foo& f) {
+        if (f.val() != success)
+                throw "test failed"sv;
+}
+
+TEST_F(thread_pool_test, enqueue_get_future_works) {
+        foo f{};
+
+        ASSERT_EQ(tp.enqueue_get_future(returned_val_passed_functor{}, foo{}).get()         , success);
+        ASSERT_EQ(tp.enqueue_get_future(returned_val_passed_functor{}, f).get()             , success);
+        ASSERT_EQ(tp.enqueue_get_future(regular_returned_ref_passed_func, f).get()          , success);
+        ASSERT_EQ(tp.enqueue_get_future(returned_val_passed_functor{}, ::std::move(f)).get(), success);
+
+        foo f2{};
+        ASSERT_EQ(tp.enqueue_get_future([]{ return success; }).get()                   , success);
+        ASSERT_EQ(tp.enqueue_get_future([f2]{ return f2.val(); }).get()                , success);
+        ASSERT_EQ(tp.enqueue_get_future([&f2]{ return f2.val(); }).get()               , success);
+        ASSERT_EQ(tp.enqueue_get_future([f = ::std::move(f2)]{ return f.val(); }).get(), success);
+}
+
 TEST_F(thread_pool_test, enqueue_works) {
         foo f{};
-        ::std::future<int> f1, f2;
-        ASSERT_NO_THROW(f1 = tp.enqueue_get_future(returned_ref_functor{}, foo{}));
-        ASSERT_NO_THROW(f2 = tp.enqueue_get_future(returned_ref_functor{}, f));
-        ASSERT_EQ(f1.get(), success);
-        ASSERT_EQ(f2.get(), success);
+
+        ASSERT_NO_THROW(tp.enqueue(nonreturned_val_passed_functor{}, foo{})             );
+        ASSERT_NO_THROW(tp.enqueue(nonreturned_val_passed_functor{}, f)                 );
+        ASSERT_NO_THROW(tp.enqueue(regular_nonreturned_const_ref_passed_func, f)        );
+        ASSERT_NO_THROW(tp.enqueue(nonreturned_val_passed_functor{}, ::std::move(f))    );
+
+        ASSERT_NO_THROW(tp.enqueue([f] { if (f.val() != success) throw "test failed"sv; }));
+        ASSERT_NO_THROW(tp.enqueue([&f] { if (f.val() != success) throw "test failed"sv; }));
+        ASSERT_NO_THROW(tp.enqueue([f = ::std::move(f)] { if (f.val() != success) throw "test failed"sv; }));
 }

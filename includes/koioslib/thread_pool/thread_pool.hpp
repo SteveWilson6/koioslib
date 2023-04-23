@@ -20,7 +20,7 @@ public:
         ~easy_thread_pool();
         
         template<typename F, typename... Args>
-                requires(::std::same_as<void, ::std::result_of_t<F(Args...)>>)
+        requires(::std::same_as<void, ::std::result_of_t<F(Args...)>>)
         void enqueue(F&& f, Args&&... args) {
                 ::std::lock_guard lk{ mut_ };
                 tasks_.emplace(
@@ -32,6 +32,7 @@ public:
         }
 
         template<typename F, typename... Args>
+        requires(::std::invocable<F, Args...>)
         auto enqueue_get_future(F&& f, Args&&... args) {
                 using return_type = ::std::result_of_t<F(Args...)>;
                 auto task_p = ::std::make_shared<::std::packaged_task<return_type()>>( 
