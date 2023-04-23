@@ -1,0 +1,8 @@
+{
+    errdata = "In file included from \27[01m\27[Ksrc/thread_pool/thread_pool.cpp:1\27[m\27[K:\
+\27[01m\27[Kincludes/koioslib/thread_pool/thread_pool.hpp:\27[m\27[K In member function ‘\27[01m\27[Kauto wilson::easy_thread_pool::enqueue_get_future(F&&, Args&& ...)\27[m\27[K’:\
+\27[01m\27[Kincludes/koioslib/thread_pool/thread_pool.hpp:34:32:\27[m\27[K \27[01;35m\27[Kwarning: \27[m\27[Kparameter declaration before lambda declaration specifiers only optional with ‘\27[01m\27[K-std=c++2b\27[m\27[K’ or ‘\27[01m\27[K-std=gnu++2b\27[m\27[K’ [\27[01;35m\27[K-Wc++23-extensions\27[m\27[K]\
+   34 |                 [&f, &args...] \27[01;35m\27[Kmutable\27[m\27[K {\
+      |                                \27[01;35m\27[K^~~~~~~\27[m\27[K\
+"
+}

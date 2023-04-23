@@ -1,0 +1,60 @@
+{
+    fmt = {
+        sysincludedirs = { },
+        version = "9.1.0",
+        links = "fmt",
+        linkdirs = { },
+        __enabled = true,
+        envs = {
+            PATH = {
+                "/home/wilson/.xmake/packages/c/cmake/3.24.2/68b116f83c5c4fb1b93d0f5f7a07021e/bin"
+            },
+            LD_LIBRARY_PATH = {
+                "/home/wilson/.xmake/packages/f/fmt/9.1.0/d363b063d73b40728217e45838c2553c/lib",
+                "/home/wilson/.xmake/packages/c/cmake/3.24.2/68b116f83c5c4fb1b93d0f5f7a07021e/lib"
+            }
+        },
+        __requirestr = "fmt"
+    },
+    gflags = {
+        envs = {
+            PATH = {
+                "/home/wilson/.xmake/packages/c/cmake/3.24.2/68b116f83c5c4fb1b93d0f5f7a07021e/bin"
+            },
+            LD_LIBRARY_PATH = {
+                "/home/wilson/.xmake/packages/g/gflags/v2.2.2/0f545414272c459b907061d5e923ed20/lib",
+                "/home/wilson/.xmake/packages/c/cmake/3.24.2/68b116f83c5c4fb1b93d0f5f7a07021e/lib"
+            }
+        },
+        version = "2.2.2",
+        links = "gflags",
+        linkdirs = "/usr/lib",
+        __enabled = true,
+        __requirestr = "gflags"
+    },
+    gtest = {
+        envs = {
+            LD_LIBRARY_PATH = {
+                "/home/wilson/.xmake/packages/g/gtest/1.12.1/77b9096bc4b34d9282f672d36b015ba9/lib"
+            }
+        },
+        libfiles = {
+            "/home/wilson/.xmake/packages/g/gtest/1.12.1/77b9096bc4b34d9282f672d36b015ba9/lib/libgmock.a",
+            "/home/wilson/.xmake/packages/g/gtest/1.12.1/77b9096bc4b34d9282f672d36b015ba9/lib/libgtest.a",
+            "/home/wilson/.xmake/packages/g/gtest/1.12.1/77b9096bc4b34d9282f672d36b015ba9/lib/libgtest_main.a"
+        },
+        links = {
+            "gmock",
+            "gtest",
+            "gtest_main"
+        },
+        syslinks = "pthread",
+        sysincludedirs = "/home/wilson/.xmake/packages/g/gtest/1.12.1/77b9096bc4b34d9282f672d36b015ba9/include",
+        version = "1.12.1",
+        installdir = "/home/wilson/.xmake/packages/g/gtest/1.12.1/77b9096bc4b34d9282f672d36b015ba9",
+        static = true,
+        linkdirs = "/home/wilson/.xmake/packages/g/gtest/1.12.1/77b9096bc4b34d9282f672d36b015ba9/lib",
+        __enabled = true,
+        __requirestr = "gtest"
+    }
+}
