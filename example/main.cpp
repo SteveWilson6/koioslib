@@ -1,11 +1,19 @@
 #include <iostream>
 #include <thread>
 #include <chrono>
-
-using namespace ::std::chrono_literals;
+#include <cstdlib>
+#include <cstring>
 
 int main()
 {
-        ::std::this_thread::sleep_for(3s);
-        ::std::cout << "example app" << ::std::endl;
+        int* ip = (int*)::malloc(sizeof(int));
+        ::memset(ip, 1, sizeof(int));
+
+        int* rip = (int*)::realloc(ip, sizeof(int) * 2);
+
+        ::std::cout << (void*)ip << ::std::endl;
+        ::std::cout << (void*)rip << ::std::endl;
+        
+        
+        free(ip);
 }
